@@ -92,10 +92,10 @@ public class RobotHardwareV1 {
 
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-         leftfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         rightfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         leftbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         rightbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//         leftfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//         rightfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//         leftbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//         rightbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();

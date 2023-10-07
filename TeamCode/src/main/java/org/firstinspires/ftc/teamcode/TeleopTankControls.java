@@ -29,12 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 /*
  * This OpMode executes a Tank Drive control TeleOp a direct drive robot
@@ -51,7 +48,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Robot: Teleop Tank", group="Robot")
 //@Disabled
-public class RobotTeleopTank_IterativeV1 extends OpMode{
+public class TeleopTankControls extends OpMode{
 
     /* Declare OpMode members. */
     public DcMotor  leftfrontDrive   = null;
@@ -128,16 +125,16 @@ public class RobotTeleopTank_IterativeV1 extends OpMode{
     public void loop() {
         double left;
         double right;
-        double driveSpeed = 1.0;
+        double driveSpeed = .5;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
 
-        leftfrontDrive.setPower(driveSpeed);
-        rightfrontDrive.setPower(driveSpeed);
-        leftbackDrive.setPower(driveSpeed);
-        rightbackDrive.setPower(driveSpeed);
+        leftfrontDrive.setPower(left);
+        rightfrontDrive.setPower(right);
+        leftbackDrive.setPower(left);
+        rightbackDrive.setPower(right);
 
         if(gamepad1.right_trigger > 0) {
             leftfrontDrive.setPower(driveSpeed);

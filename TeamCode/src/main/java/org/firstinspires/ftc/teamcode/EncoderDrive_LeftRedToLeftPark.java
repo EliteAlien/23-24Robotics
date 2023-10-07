@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -61,9 +60,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
+@Autonomous(name="LeftRed-->LeftPark", group="Robot")
 //@Disabled
-public class RobotAutoDriveByEncoder_LinearV1 extends LinearOpMode {
+public class EncoderDrive_LeftRedToLeftPark extends LinearOpMode {
 RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
     private ElapsedTime     runtime = new ElapsedTime();
@@ -75,31 +74,36 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
     static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 3.77952755906 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.1;
-    static final double     TURN_SPEED              = 0.5;
+    static final double     DRIVE_SPEED             = 1.00;
+    static final double     NORMAL_SPEED           = 0.4;
+    static final double     TURN_SPEED              = 0.4;
 
     @Override
     public void runOpMode() {
 
         robot.init();
 
-        robot.leftfrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightfrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftbackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightbackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         robot.leftfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        robot.leftfrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightfrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftbackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightbackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.leftfrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.leftbackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.rightfrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.rightbackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Starting at",  "%7d :%7d",
+        telemetry.addData("Starting at",  "%7d,%7d,%7d,%7d",
                           robot.leftfrontDrive.getCurrentPosition(),
                           robot.rightfrontDrive.getCurrentPosition(),
                           robot.leftbackDrive.getCurrentPosition(),
@@ -111,9 +115,11 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  1,  1, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-//        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-//        encoderDrive(DRIVE_SPEED, -12, -12, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(NORMAL_SPEED, 5 , 5 , 5.0);  // S1: Go straight a little
+        encoderDrive(TURN_SPEED,   15, -15, 4.0);  // S2: Turn 90 degrees
+        encoderDrive(DRIVE_SPEED, 60, 60, 4.0);  // S3: Go straight
+        encoderDrive(TURN_SPEED, 7.5  , 7.5, 4.0);  // S4: Turn 45-90 degrees
+        encoderDrive(NORMAL_SPEED, 24, 24, 4.0);  // S5: Go straight and end in left park
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -142,12 +148,13 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
             // Determine new target position, and pass to motor controller
             newLeftFrontTarget = robot.leftfrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             newRightFrontTarget = robot.rightfrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            newLeftBackTarget = robot.leftfrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightBackTarget = robot.rightfrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newLeftBackTarget = robot.leftbackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightBackTarget = robot.rightbackDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+
             robot.leftfrontDrive.setTargetPosition(newLeftFrontTarget);
             robot.rightfrontDrive.setTargetPosition(newRightFrontTarget);
-            robot.leftbackDrive.setTargetPosition(newLeftFrontTarget);
-            robot.rightbackDrive.setTargetPosition(newRightFrontTarget);
+            robot.leftbackDrive.setTargetPosition(newLeftBackTarget);
+            robot.rightbackDrive.setTargetPosition(newRightBackTarget);
 
             // Turn On RUN_TO_POSITION
             robot.leftfrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -157,10 +164,10 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftfrontDrive.setPower(Math.abs(speed));
-            robot.rightfrontDrive.setPower(Math.abs(speed));
-            robot.leftbackDrive.setPower(Math.abs(speed));
-            robot.rightbackDrive.setPower(Math.abs(speed));
+            robot.leftfrontDrive.setPower(speed);
+            robot.rightfrontDrive.setPower(speed);
+            robot.leftbackDrive.setPower(speed);
+            robot.rightbackDrive.setPower(speed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -170,12 +177,16 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (robot.leftfrontDrive.isBusy() && robot.rightfrontDrive.isBusy() && robot.leftbackDrive.isBusy() && robot.rightbackDrive.isBusy())) {
+                   //(robot.leftfrontDrive.isBusy() )) {
+                   (robot.leftfrontDrive.isBusy() || robot.rightfrontDrive.isBusy() || robot.leftbackDrive.isBusy() || robot.rightbackDrive.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d", newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget,  newRightBackTarget);
-                telemetry.addData("Currently at",  " at %7d :%7d",
-                        robot.leftfrontDrive.getCurrentPosition(), robot.rightfrontDrive.getCurrentPosition(), robot.leftbackDrive.getCurrentPosition(), robot.rightbackDrive.getCurrentPosition());
+                telemetry.addData("Running to",  " at %7d,%7d,%7d,%7d", newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget,  newRightBackTarget);
+                telemetry.addData("Currently at",  " at %7d,%7d,%7d,%7d",
+                        robot.leftfrontDrive.getCurrentPosition(),
+                        robot.rightfrontDrive.getCurrentPosition(),
+                        robot.leftbackDrive.getCurrentPosition(),
+                        robot.rightbackDrive.getCurrentPosition());
                 telemetry.update();
             }
 

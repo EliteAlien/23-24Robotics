@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-//@Disabled
+@Disabled
 public class RobotAutoDriveByTime_LinearV1 extends LinearOpMode {
     RobotHardwareV1 robot=new RobotHardwareV1(this);
 
