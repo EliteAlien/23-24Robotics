@@ -60,9 +60,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="LeftRed-->LeftPark", group="Robot")
+@Autonomous(name="RightBlue-->RightPark", group="Robot")
 //@Disabled
-public class EncoderDrive_LeftRedToLeftPark extends LinearOpMode {
+public class EncoderDrive_RightBlueToRightPark extends LinearOpMode {
 RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
     private ElapsedTime     runtime = new ElapsedTime();
@@ -116,10 +116,11 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(NORMAL_SPEED, 30, 30, 5.0);  // S1: Go straight a little
-        encoderDrive(TURN_SPEED,   15, -15, 4.0);  // S2: Turn 90 degrees
+        encoderDrive(TURN_SPEED,   -15, 15, 4.0);  // S2: Turn 90 degrees
         encoderDrive(NORMAL_SPEED, 60, 60, 4.0);  // S3: Go straight
-        encoderDrive(TURN_SPEED, -3.4, 3.4, 4.0);  // S4: Turn 45-90 degrees
+        encoderDrive(TURN_SPEED, 3.7, -3.7, 4.0);  // S4: Turn 45-90 degrees
         encoderDrive(NORMAL_SPEED, 48, 48, 4.0);  // S5: Go straight and end in left park
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // pause to display final telemetry message.
