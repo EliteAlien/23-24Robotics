@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -64,6 +66,10 @@ public class RobotHardwareV1 {
     public DcMotor leftbackDrive   = null;
     public DcMotor rightbackDrive  = null;
 
+    public DcMotorEx encoderone = null;
+    public DcMotorEx encodertwo = null;
+
+
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardwareV1(LinearOpMode opmode) {
         myOpMode = opmode;
@@ -81,6 +87,8 @@ public class RobotHardwareV1 {
         rightfrontDrive = myOpMode.hardwareMap.get(DcMotor.class, "RF");
         leftbackDrive  = myOpMode.hardwareMap.get(DcMotor.class, "LB");
         rightbackDrive = myOpMode.hardwareMap.get(DcMotor.class, "RB");
+        encoderone = myOpMode.hardwareMap.get(DcMotorEx.class, "EncoderX");
+        encodertwo = myOpMode.hardwareMap.get(DcMotorEx.class, "EncoderY");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -89,6 +97,7 @@ public class RobotHardwareV1 {
         rightfrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftbackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightbackDrive.setDirection(DcMotor.Direction.FORWARD);
+        encoderone.setDirection(DcMotorEx.Direction.REVERSE);
 
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
