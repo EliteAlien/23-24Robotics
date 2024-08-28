@@ -29,10 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -65,9 +67,17 @@ public class RobotHardwareV1 {
     public DcMotor rightfrontDrive  = null;
     public DcMotor leftbackDrive   = null;
     public DcMotor rightbackDrive  = null;
+    public DcMotor  Lift     = null;
+
+    public HuskyLens huskyLens;
 
     public DcMotorEx encoderone = null;
     public DcMotorEx encodertwo = null;
+//    public Servo    Claw     = null;
+
+    public Servo    Vert     = null;
+    public Servo    Claw     = null;
+
 
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
@@ -88,6 +98,11 @@ public class RobotHardwareV1 {
         leftbackDrive  = myOpMode.hardwareMap.get(DcMotor.class, "LB");
         rightbackDrive = myOpMode.hardwareMap.get(DcMotor.class, "RB");
         encoderone = myOpMode.hardwareMap.get(DcMotorEx.class, "EncoderX");
+        Lift = myOpMode.hardwareMap.get(DcMotor.class, "Lift");
+        huskyLens = myOpMode.hardwareMap.get(HuskyLens.class, "huskylens");
+        Vert = myOpMode.hardwareMap.get(Servo.class, "Vert");
+        Claw = myOpMode.hardwareMap.get(Servo.class, "Claw");
+
         encodertwo = myOpMode.hardwareMap.get(DcMotorEx.class, "EncoderY");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -98,6 +113,10 @@ public class RobotHardwareV1 {
         leftbackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightbackDrive.setDirection(DcMotor.Direction.FORWARD);
         encoderone.setDirection(DcMotorEx.Direction.REVERSE);
+        Lift.setDirection(DcMotor.Direction.REVERSE);
+
+        Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
@@ -105,6 +124,15 @@ public class RobotHardwareV1 {
 //         rightfrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //         leftbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //         rightbackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
+
+        if (!huskyLens.knock()) {
+            myOpMode.telemetry.addData(">>", "Problem communicating with " + huskyLens.getDeviceName());
+        } else {
+            myOpMode.telemetry.addData(">>", "Press start to continue");
+        }
 
         myOpMode.telemetry.addData(">", "Hardware Initialized");
         myOpMode.telemetry.update();
@@ -143,10 +171,10 @@ public class RobotHardwareV1 {
      */
     public void setDrivePower(double leftWheel, double rightWheel) {
         // Output the values to the motor drives.
-        leftfrontDrive.setPower(leftWheel);
         rightfrontDrive.setPower(rightWheel);
         leftbackDrive.setPower(leftWheel);
         rightbackDrive.setPower(rightWheel);
+        leftfrontDrive.setPower(leftWheel);
     }
 
     public void setRightPower(double rightWheel) {
@@ -154,6 +182,13 @@ public class RobotHardwareV1 {
         leftbackDrive.setPower(0);
         rightfrontDrive.setPower(rightWheel);
         rightbackDrive.setPower(rightWheel);
+    }
+
+    public void DriveForward ( double drivepower) {
+        leftfrontDrive.setPower(drivepower);
+        rightfrontDrive.setPower(drivepower);
+        leftbackDrive.setPower(drivepower);
+        rightbackDrive.setPower(drivepower);
     }
 
     public void setLeftPower(double leftWheel) {
@@ -182,6 +217,10 @@ public class RobotHardwareV1 {
         rightfrontDrive.setPower(-drivepower);
         leftbackDrive.setPower(-drivepower);
         rightbackDrive.setPower(drivepower);
+    }
+
+    public void Lift_UP (double drivepower) {
+        Lift.setPower(drivepower);
     }
 
 }

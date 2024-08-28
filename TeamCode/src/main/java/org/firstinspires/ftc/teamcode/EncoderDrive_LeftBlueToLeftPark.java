@@ -61,9 +61,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="LeftRed-->RightPark", group="Robot")
+@Autonomous(name="LeftBlue-->LeftPark", group="Robot")
 @Disabled
-public class EncoderDrive_LeftRedToRightPark extends LinearOpMode {
+public class EncoderDrive_LeftBlueToLeftPark extends LinearOpMode {
 RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
     private ElapsedTime     runtime = new ElapsedTime();
@@ -80,7 +80,7 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 1.00;
-    static final double     NORMAL_SPEED            = 0.4;
+    static final double     NORMAL_SPEED           = 0.4;
     static final double     TURN_SPEED              = 0.4;
 
     @Override
@@ -116,9 +116,15 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(NORMAL_SPEED, 5 , 5 , 5.0);  // S1: Go straight a little
-        encoderDrive(TURN_SPEED,   15, -15, 4.0);  // S2: Turn 90 degrees
-        encoderDrive(DRIVE_SPEED, 96, 96, 4.0);  // S3: Go straight to end in right park
+        encoderDrive(NORMAL_SPEED, 32, 32, 5.0);  // S1: Go straight a little to drop off on middle
+        encoderDrive(NORMAL_SPEED, -32, -32, 4.0);  // S2: Go back and then scuttle left to park
+
+        robot.scuttle_left(NORMAL_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
+            telemetry.addData("Path", "Leg 4: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

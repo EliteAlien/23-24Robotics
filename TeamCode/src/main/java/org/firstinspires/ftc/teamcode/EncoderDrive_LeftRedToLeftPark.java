@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -61,7 +62,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="LeftRed-->LeftPark", group="Robot")
-//@Disabled
+@Disabled
 public class EncoderDrive_LeftRedToLeftPark extends LinearOpMode {
 RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
@@ -118,8 +119,9 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
         encoderDrive(NORMAL_SPEED, 30, 30, 5.0);  // S1: Go straight a little
         encoderDrive(TURN_SPEED,   15, -15, 4.0);  // S2: Turn 90 degrees
         encoderDrive(NORMAL_SPEED, 60, 60, 4.0);  // S3: Go straight
-        encoderDrive(TURN_SPEED, -3.4, 3.4, 4.0);  // S4: Turn 45-90 degrees
+        encoderDrive(TURN_SPEED, -4.6, 4.6, 4.0);  // S4: Turn 45-90 degrees
         encoderDrive(NORMAL_SPEED, 48, 48, 4.0);  // S5: Go straight and end in left park
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // pause to display final telemetry message.

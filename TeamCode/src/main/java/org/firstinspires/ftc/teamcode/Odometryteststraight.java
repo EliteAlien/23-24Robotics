@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -62,7 +63,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="OdometryTest", group="Robot")
-//@Disabled
+@Disabled
 public class Odometryteststraight extends LinearOpMode {
     RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
@@ -89,7 +90,7 @@ public class Odometryteststraight extends LinearOpMode {
         robot.init();
 
         robot.encoderone.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        robot.encodertwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.encodertwo.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.leftfrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.leftbackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -97,9 +98,9 @@ public class Odometryteststraight extends LinearOpMode {
         robot.rightbackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Starting at", "%7d,%7d",
-                robot.encoderone.getCurrentPosition(),
-                robot.encodertwo.getCurrentPosition());
+//        telemetry.addData("Starting at", "%7d,%7d",
+//                robot.encoderone.getCurrentPosition(),
+//                robot.encodertwo.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -134,7 +135,7 @@ public class Odometryteststraight extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             Xtarget = robot.encoderone.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            Ytarget = robot.encodertwo.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+//            Ytarget = robot.encodertwo.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -154,10 +155,10 @@ public class Odometryteststraight extends LinearOpMode {
                     (robot.encoderone.getCurrentPosition() < Xtarget)) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to", " at %7d,%7d", Xtarget, Ytarget);
-                telemetry.addData("Currently at", " at %7d,%7d",
-                        robot.encoderone.getCurrentPosition(),
-                        robot.encodertwo.getCurrentPosition());
+                telemetry.addData("Running to", " at %7d,%7d", Xtarget, Xtarget);
+//                telemetry.addData("Currently at", " at %7d,%7d",
+//                        robot.encoderone.getCurrentPosition(),
+//                        robot.encodertwo.getCurrentPosition());
                 telemetry.update();
             }
 

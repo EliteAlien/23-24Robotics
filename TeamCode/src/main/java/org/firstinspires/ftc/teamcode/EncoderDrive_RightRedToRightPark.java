@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -61,7 +62,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="RightRed-->RightPark", group="Robot")
-//@Disabled
+@Disabled
 public class EncoderDrive_RightRedToRightPark extends LinearOpMode {
 RobotHardwareV1 robot = new RobotHardwareV1(this);
     /* Declare OpMode members. */
@@ -115,9 +116,15 @@ RobotHardwareV1 robot = new RobotHardwareV1(this);
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(NORMAL_SPEED, 5 , 5 , 5.0);  // S1: Go straight a little
-        encoderDrive(TURN_SPEED,   15, -15, 4.0);  // S2: Turn 90 degrees
-        encoderDrive(DRIVE_SPEED, 24, 24, 4.0);  // S3: Go straight to end in right park
+        encoderDrive(NORMAL_SPEED, 32, 32, 5.0);  // S1: Go straight a little
+        encoderDrive(NORMAL_SPEED, -32, -32, 4.0);  // S3: Go straight
+
+        robot.scuttle_right(NORMAL_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
+            telemetry.addData("Path", "Leg 4: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
